@@ -1,4 +1,4 @@
-﻿namespace Contracts;
+﻿namespace Contracts.Event;
 
 public abstract record Event
 {

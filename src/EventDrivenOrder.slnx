@@ -1,8 +1,10 @@
 <Solution>
   <Folder Name="/Inventory/">
+    <Project Path="Inventory.Domain/Inventory.Domain.csproj" />
     <Project Path="Inventory.Events/Inventory.Events.csproj" />
   </Folder>
   <Folder Name="/Order/">
+    <Project Path="Order.Domain/Order.Domain.csproj" />
     <Project Path="Order.Events/Order.Events.csproj" />
   </Folder>
   <Folder Name="/Shared/">

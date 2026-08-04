@@ -1,9 +1,9 @@
 ﻿using Contracts;
+using Contracts.Event;
 
 namespace Order.Events;
 
-public record InventoryReservedEvent(
+public record OrderCreatedEvent(
     Guid OrderId,
     Guid ProductId,
-    int Quantity
-) : Event;
+    int Quantity) : Event;
