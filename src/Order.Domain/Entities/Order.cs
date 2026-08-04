@@ -1,3 +1,4 @@
+using FluentResults;
 using Order.Domain.Enums;
 
 namespace Order.Domain.Entities;
@@ -5,16 +6,26 @@ namespace Order.Domain.Entities;
 public class Order
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid ProductId { get; private set; }
     public int Quantity { get; private set; }
     public EOrderStatus Status { get; private set; } = EOrderStatus.Pending;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public Order(int quantity)
+    private Order(Guid productId, int quantity)
     {
-        if (quantity <= 0)
-            throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
-
+        ProductId = productId;
         Quantity = quantity;
+    }
+
+    public static Result<Order> Create(Guid productId, int quantity)
+    {
+        if (productId == Guid.Empty)
+            return Result.Fail<Order>("ProductId is required.");
+
+        if (quantity <= 0)
+            return Result.Fail<Order>("Quantity must be greater than zero.");
+
+        return Result.Ok(new Order(productId, quantity));
     }
 
     public void Confirm()

@@ -1,3 +1,5 @@
+using FluentResults;
+
 namespace Inventory.Domain.Entities;
 
 public class Product
@@ -27,15 +29,16 @@ public class Product
         QuantityAvailable = quantity;
     }
 
-    public void Reserve(int quantity)
+    public Result Reserve(int quantity)
     {
         if (quantity <= 0)
-            throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
+            return Result.Fail("Quantity must be greater than zero.");
 
         if (quantity > QuantityAvailable)
-            throw new InvalidOperationException("Insufficient stock available.");
+            return Result.Fail("Insufficient stock available.");
 
         QuantityAvailable -= quantity;
+        return Result.Ok();
     }
 
     public void Restock(int quantity)
