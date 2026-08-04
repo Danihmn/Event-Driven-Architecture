@@ -12,4 +12,5 @@
   <Folder Name="/Shared/">
     <Project Path="Shared.Contracts/Shared.Contracts.csproj" />
   </Folder>
+  <Project Path="EventDrivenOrder.AppHost/EventDrivenOrder.AppHost.csproj" />
 </Solution>
