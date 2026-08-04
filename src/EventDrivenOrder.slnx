@@ -1,10 +1,12 @@
 <Solution>
   <Folder Name="/Inventory/">
+    <Project Path="Inventory.Application/Inventory.Application.csproj" />
     <Project Path="Inventory.Domain/Inventory.Domain.csproj" />
     <Project Path="Inventory.Events/Inventory.Events.csproj" />
     <Project Path="Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Order/">
+    <Project Path="Order.Application/Order.Application.csproj" />
     <Project Path="Order.Domain/Order.Domain.csproj" />
     <Project Path="Order.Events/Order.Events.csproj" />
     <Project Path="Order.Infrastructure/Order.Infrastructure.csproj" />
