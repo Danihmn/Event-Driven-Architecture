@@ -1,20 +1,10 @@
-﻿using Contracts.Domain;
+﻿namespace Inventory.Domain.Entities;
 
-namespace Inventory.Domain.Entities;
-
-public class Product : Entity
+public class Product(string name, decimal price, int quantity)
 {
-    public string Name { get; private set; }
-    public decimal Price { get; private set; }
-    public int QuantityAvailable { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-
-    public Product(string name, decimal price, int quantity)
-    {
-        Id = Guid.NewGuid();
-        Name = name;
-        Price = price;
-        QuantityAvailable = quantity;
-        CreatedAt = DateTime.UtcNow;
-    }
+    public Guid Id { get; private set; } = Guid.NewGuid();
+    public string Name { get; private set; } = name;
+    public decimal Price { get; private set; } = price;
+    public int QuantityAvailable { get; private set; } = quantity;
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 }
