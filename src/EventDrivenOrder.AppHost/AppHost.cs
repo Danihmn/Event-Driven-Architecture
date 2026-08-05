@@ -16,4 +16,16 @@ var inventoryDb = builder
     .WithLifetime(ContainerLifetime.Persistent)
     .AddDatabase("inventory-db");
 
+builder.AddProject<Projects.Order_Api>("order-api")
+    .WithReference(orderDb)
+    .WithReference(kafka)
+    .WaitFor(orderDb)
+    .WaitFor(kafka);
+
+builder.AddProject<Projects.Inventory_Api>("inventory-api")
+    .WithReference(inventoryDb)
+    .WithReference(kafka)
+    .WaitFor(inventoryDb)
+    .WaitFor(kafka);
+
 builder.Build().Run();
