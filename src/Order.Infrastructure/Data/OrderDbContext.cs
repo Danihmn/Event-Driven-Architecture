@@ -2,7 +2,7 @@
 
 namespace Order.Infrastructure.Data;
 
-public class OrderDbContext : DbContext
+public class OrderDbContext(DbContextOptions<OrderDbContext> options) : DbContext(options)
 {
     public DbSet<Domain.Entities.Order> Orders { get; set; }
 
