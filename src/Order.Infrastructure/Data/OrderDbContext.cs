@@ -9,7 +9,7 @@ public class OrderDbContext(DbContextOptions<OrderDbContext> options) : DbContex
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
-            optionsBuilder.UseNpgsql("Name=ConnectionStrings:DefaultConnection");
+            optionsBuilder.UseNpgsql("Name=ConnectionStrings:order-db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -10,7 +10,7 @@ public class InventoryDbContext(DbContextOptions<InventoryDbContext> options) : 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
-            optionsBuilder.UseNpgsql("Name=ConnectionStrings:DefaultConnection");
+            optionsBuilder.UseNpgsql("Name=ConnectionStrings:inventory-db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
