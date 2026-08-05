@@ -5,10 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Commands.ReserveStock;
 
-public sealed class ReserveStockCommandHandler(IProductRepository repository, ILogger<ReserveStockCommandHandler> logger)
+public sealed class ReserveStockCommandHandler(
+    IProductRepository repository,
+    ILogger<ReserveStockCommandHandler> logger)
     : IRequestHandler<ReserveStockCommand, Result<ReserveStockResponse>>
 {
-    public async Task<Result<ReserveStockResponse>> Handle(ReserveStockCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ReserveStockResponse>> Handle(ReserveStockCommand request,
+        CancellationToken cancellationToken)
     {
         logger.LogInformation("Starting to reserve stock for product {ProductId}", request.ProductId);
 
@@ -16,7 +19,8 @@ public sealed class ReserveStockCommandHandler(IProductRepository repository, IL
 
         if (product is null)
         {
-            logger.LogWarning("Cannot reserve stock for product {ProductId} because it was not found", request.ProductId);
+            logger.LogWarning("Cannot reserve stock for product {ProductId} because it was not found",
+                request.ProductId);
             return Result.Fail<ReserveStockResponse>("Product not found");
         }
 
