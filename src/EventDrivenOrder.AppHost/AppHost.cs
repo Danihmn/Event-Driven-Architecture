@@ -5,15 +5,13 @@ var kafka = builder
     .WithKafkaUI();
 
 var orderDb = builder
-    .AddPostgres("order-postgres")
+    .AddPostgres("order-postgres", port: 5432)
     .WithDataVolume()
-    .WithLifetime(ContainerLifetime.Persistent)
     .AddDatabase("order-db");
 
 var inventoryDb = builder
-    .AddPostgres("inventory-postgres")
+    .AddPostgres("inventory-postgres", port: 5433)
     .WithDataVolume()
-    .WithLifetime(ContainerLifetime.Persistent)
     .AddDatabase("inventory-db");
 
 builder.AddProject<Projects.Order_Api>("order-api")

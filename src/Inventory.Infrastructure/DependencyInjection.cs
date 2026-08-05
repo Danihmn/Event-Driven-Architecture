@@ -1,5 +1,6 @@
 ﻿using Inventory.Domain.Repository;
 using Inventory.Infrastructure.Data;
+using Inventory.Infrastructure.Data.Context;
 using Inventory.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

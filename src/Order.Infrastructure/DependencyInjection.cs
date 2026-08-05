@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Order.Domain.Repository;
-using Order.Infrastructure.Data;
+using Order.Infrastructure.Data.Context;
 using Order.Infrastructure.Repository;
 
 namespace Order.Infrastructure;

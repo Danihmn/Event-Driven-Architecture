@@ -10,23 +10,28 @@ public class Product
     public int QuantityAvailable { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public Product(string name, decimal price, int quantity)
+    private Product(string name, decimal price, int quantityAvailable)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name is required.", nameof(name));
-
-        if (name.Length > 50)
-            throw new ArgumentException("Name must be at most 50 characters long.", nameof(name));
-
-        if (price < 0)
-            throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
-
-        if (quantity < 0)
-            throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity cannot be negative.");
-
         Name = name;
         Price = price;
-        QuantityAvailable = quantity;
+        QuantityAvailable = quantityAvailable;
+    }
+
+    public static Result<Product> Create(string name, decimal price, int quantityAvailable)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return Result.Fail<Product>("Name is required.");
+
+        if (name.Length > 50)
+            return Result.Fail<Product>("Name must be at most 50 characters long.");
+
+        if (price < 0)
+            return Result.Fail<Product>("Price cannot be negative.");
+
+        if (quantityAvailable < 0)
+            return Result.Fail<Product>("Quantity cannot be negative.");
+
+        return Result.Ok(new Product(name, price, quantityAvailable));
     }
 
     public Result Reserve(int quantity)

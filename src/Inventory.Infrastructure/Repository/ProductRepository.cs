@@ -1,6 +1,7 @@
 using Inventory.Domain.Entities;
 using Inventory.Domain.Repository;
 using Inventory.Infrastructure.Data;
+using Inventory.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Infrastructure.Repository;

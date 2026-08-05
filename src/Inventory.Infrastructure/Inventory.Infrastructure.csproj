@@ -4,15 +4,27 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
+      <UserSecretsId>6e2b70d1-50ab-442c-8023-21d57eb88a83</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.10" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Configuration">
+        <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.10\Microsoft.Extensions.Configuration.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

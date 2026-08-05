@@ -1,7 +1,7 @@
 ﻿using Inventory.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Inventory.Infrastructure.Data;
+namespace Inventory.Infrastructure.Data.Context;
 
 public class InventoryDbContext(DbContextOptions<InventoryDbContext> options) : DbContext(options)
 {

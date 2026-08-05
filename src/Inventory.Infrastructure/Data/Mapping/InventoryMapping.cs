@@ -12,9 +12,9 @@ public class InventoryMapping : IEntityTypeConfiguration<Product>
 
         builder.HasKey(p => p.Id).HasName("pk_products");
 
-        builder.Property(p => p.Name).HasMaxLength(50).IsRequired();
-        builder.Property(p => p.Price).HasColumnType("decimal(10,2)").IsRequired();
+        builder.Property(p => p.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
+        builder.Property(p => p.Price).HasColumnName("price").HasColumnType("decimal(10,2)").IsRequired();
         builder.Property(p => p.QuantityAvailable).HasColumnName("quantity_available").IsRequired();
-        builder.Property(p => p.CreatedAt).HasDefaultValue(DateTime.UtcNow);
+        builder.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
     }
 }

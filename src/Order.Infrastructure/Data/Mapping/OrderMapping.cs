@@ -9,10 +9,12 @@ public class OrderMapping : IEntityTypeConfiguration<Domain.Entities.Order>
     {
         builder.ToTable("orders");
 
-        builder.HasKey(o => o.Id).HasName("pk_order");
+        builder.HasKey(o => o.Id).HasName("pk_orders");
 
-        builder.Property(o => o.Quantity).IsRequired();
-        builder.Property(o => o.Status).HasConversion<string>();
-        builder.Property(o => o.CreatedAt).HasDefaultValue(DateTime.UtcNow);
+        builder.Property(o => o.Id).HasColumnName("id");
+        builder.Property(o => o.ProductId).HasColumnName("product_id").IsRequired();
+        builder.Property(o => o.Quantity).HasColumnName("quantity").IsRequired();
+        builder.Property(o => o.Status).HasColumnName("status").HasConversion<string>().HasMaxLength(20).IsRequired();
+        builder.Property(o => o.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
     }
 }

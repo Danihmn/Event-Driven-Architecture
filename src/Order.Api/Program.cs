@@ -3,7 +3,7 @@ using Contracts.Infra.Event;
 using Order.Api.Messaging;
 using Order.Application;
 using Order.Infrastructure;
-using Order.Infrastructure.Data;
+using Order.Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
