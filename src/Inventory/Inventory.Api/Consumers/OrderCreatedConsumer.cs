@@ -23,7 +23,8 @@ public class OrderCreatedConsumer(IConsumer<string, string> consumer, IServicePr
             using var scope = serviceProvider.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-            await mediator.Send(new ReserveStockCommand(@event.ProductId, @event.Quantity), stoppingToken);
+            await mediator.Send(new ReserveStockCommand(@event.ProductId, @event.Quantity),
+                stoppingToken);
 
             consumer.Commit(result);
         }

@@ -1,3 +1,6 @@
+using Contracts;
+using Contracts.Event;
+using Contracts.Infra.Event;
 using FluentResults;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -5,7 +8,10 @@ using Order.Domain.Repository;
 
 namespace Order.Application.Commands.CreateOrder;
 
-public sealed class CreateOrderCommandHandler(IOrderRepository repository, ILogger<CreateOrderCommandHandler> logger)
+public sealed class CreateOrderCommandHandler(
+    IOrderRepository repository,
+    IEventPublisher publisher,
+    ILogger<CreateOrderCommandHandler> logger)
     : IRequestHandler<CreateOrderCommand, Result<CreateOrderResponse>>
 {
     public async Task<Result<CreateOrderResponse>> Handle(CreateOrderCommand request,
@@ -24,6 +30,9 @@ public sealed class CreateOrderCommandHandler(IOrderRepository repository, ILogg
         var order = orderResult.Value;
 
         await repository.CreateAsync(order, cancellationToken);
+
+        await publisher.PublishAsync(Topics.OrderCreated,
+            new OrderCreatedEvent(order.Id, order.ProductId, order.Quantity), cancellationToken);
 
         logger.LogInformation("Created order {OrderId} for product {ProductId}", order.Id, order.ProductId);
 

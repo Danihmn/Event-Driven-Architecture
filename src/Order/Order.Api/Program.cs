@@ -1,5 +1,6 @@
 using Confluent.Kafka;
 using Contracts.Infra.Event;
+using Order.Api.Endpoints;
 using Order.Api.Messaging;
 using Order.Application;
 using Order.Infrastructure;
@@ -32,5 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapOrderEndpoints();
 
 app.Run();
