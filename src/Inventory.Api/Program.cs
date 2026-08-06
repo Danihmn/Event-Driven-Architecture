@@ -1,8 +1,11 @@
 using Confluent.Kafka;
 using Inventory.Application;
 using Inventory.Infrastructure;
+using Inventory.Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddNpgsqlDbContext<InventoryDbContext>("inventorydb");
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();

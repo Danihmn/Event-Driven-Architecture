@@ -6,13 +6,15 @@ var kafka = builder
 
 var orderDb = builder
     .AddPostgres("order-postgres", port: 5432)
+    .WithPgWeb()
     .WithDataVolume()
-    .AddDatabase("order-db");
+    .AddDatabase("orderdb");
 
 var inventoryDb = builder
     .AddPostgres("inventory-postgres", port: 5433)
+    .WithPgWeb()
     .WithDataVolume()
-    .AddDatabase("inventory-db");
+    .AddDatabase("inventorydb");
 
 builder.AddProject<Projects.Order_Api>("order-api")
     .WithReference(orderDb)

@@ -7,7 +7,7 @@ using Order.Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddNpgsqlDbContext<OrderDbContext>("order-db");
+builder.AddNpgsqlDbContext<OrderDbContext>("orderdb");
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
