@@ -43,8 +43,4 @@ public sealed class ReserveStockCommandHandler(
 
         return Result.Ok(new ReserveStockResponse(product.Id, product.QuantityAvailable, request.Quantity));
     }
-
-    private async Task SendFailedReserveStock(ReserveStockCommand request, CancellationToken cancellationToken)
-        => await publisher.PublishAsync(Topics.StockReservationFailed,
-            new InventoryReserveFailEvent(request.OrderId, request.ProductId, request.Quantity), cancellationToken);
 }
