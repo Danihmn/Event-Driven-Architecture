@@ -17,7 +17,7 @@ public class CancelOrderCommandHandler(IOrderRepository repository, ILogger<Canc
 
         if (order is null)
         {
-            logger.LogWarning("Cannot cancel  order {OrderId} because it was not found", request.OrderId);
+            logger.LogWarning("Cannot cancel order {OrderId} because it was not found", request.OrderId);
             return Result.Fail<CancelOrderResponse>("Order not found");
         }
 

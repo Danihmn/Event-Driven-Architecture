@@ -13,7 +13,7 @@ builder.AddNpgsqlDbContext<InventoryDbContext>("inventorydb");
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 
-builder.Services.AddSingleton<IConsumer<string, string>>(sp =>
+builder.Services.AddSingleton<IConsumer<string, string>>(_ =>
 {
     var config = new ConsumerConfig
     {
@@ -26,7 +26,7 @@ builder.Services.AddSingleton<IConsumer<string, string>>(sp =>
     return new ConsumerBuilder<string, string>(config).Build();
 });
 
-builder.Services.AddSingleton<IProducer<string, string>>(sp =>
+builder.Services.AddSingleton<IProducer<string, string>>(_ =>
 {
     var config = new ProducerConfig
     {
