@@ -1,10 +1,10 @@
 using Contracts;
-using Contracts.Event;
 using Contracts.Infra.Publish;
 using FluentResults;
 using Inventory.Domain.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.Implementations.Event;
 
 namespace Inventory.Application.Commands.ReserveStock;
 

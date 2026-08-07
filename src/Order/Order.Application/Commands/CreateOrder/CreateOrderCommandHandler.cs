@@ -1,10 +1,10 @@
 using Contracts;
-using Contracts.Event;
 using Contracts.Infra.Publish;
 using FluentResults;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Order.Domain.Repository;
+using Shared.Implementations.Event;
 
 namespace Order.Application.Commands.CreateOrder;
 

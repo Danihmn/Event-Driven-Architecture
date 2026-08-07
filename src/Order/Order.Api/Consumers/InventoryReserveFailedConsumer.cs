@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using Confluent.Kafka;
 using Contracts;
-using Contracts.Event;
 using MediatR;
 using Order.Application.Commands.CancelOrder;
+using Shared.Implementations.Event;
 
 namespace Order.Api.Consumers;
 

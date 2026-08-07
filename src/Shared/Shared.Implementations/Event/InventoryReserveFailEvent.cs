@@ -1,6 +1,6 @@
-﻿namespace Contracts.Event;
+﻿namespace Shared.Implementations.Event;
 
 public record InventoryReserveFailEvent(
     Guid OrderId,
     Guid ProductId,
-    int Quantity) : Abstractions.Event;
+    int Quantity) : Contracts.Event;
