@@ -18,7 +18,7 @@ public static class OrderEndpoints
 
             return Results.BadRequest(new
             {
-                Errors = result.Errors
+                result.Errors
             });
         });
     }
