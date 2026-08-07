@@ -13,6 +13,7 @@
   </Folder>
   <Folder Name="/Shared/">
     <Project Path="Shared/Shared.Contracts/Shared.Contracts.csproj" />
+    <Project Path="Shared/Shared.Implementations/Shared.Implementations.csproj" />
   </Folder>
   <Project Path="EventDrivenOrder.AppHost/EventDrivenOrder.AppHost.csproj" />
 </Solution>

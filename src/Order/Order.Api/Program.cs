@@ -2,10 +2,10 @@ using Confluent.Kafka;
 using Contracts.Infra.Event;
 using Order.Api.Consumers;
 using Order.Api.Endpoints;
-using Order.Api.Messaging;
 using Order.Application;
 using Order.Infrastructure;
 using Order.Infrastructure.Data.Context;
+using Shared.Implementations.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,10 +1,10 @@
 using Confluent.Kafka;
 using Contracts.Infra.Event;
 using Inventory.Api.Consumers;
-using Inventory.Api.Messaging;
 using Inventory.Application;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Data.Context;
+using Shared.Implementations.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 

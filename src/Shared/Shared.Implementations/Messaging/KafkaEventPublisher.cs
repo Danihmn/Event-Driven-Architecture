@@ -3,7 +3,7 @@ using Confluent.Kafka;
 using Contracts.Event.Abstractions;
 using Contracts.Infra.Event;
 
-namespace Inventory.Api.Messaging;
+namespace Shared.Implementations.Messaging;
 
 public class KafkaEventPublisher(IProducer<string, string> producer) : IEventPublisher
 {
