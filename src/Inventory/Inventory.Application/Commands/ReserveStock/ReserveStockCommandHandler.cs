@@ -1,3 +1,6 @@
+using Contracts;
+using Contracts.Event;
+using Contracts.Infra.Event;
 using FluentResults;
 using Inventory.Domain.Repository;
 using MediatR;
@@ -7,6 +10,7 @@ namespace Inventory.Application.Commands.ReserveStock;
 
 public sealed class ReserveStockCommandHandler(
     IProductRepository repository,
+    IEventPublisher publisher,
     ILogger<ReserveStockCommandHandler> logger)
     : IRequestHandler<ReserveStockCommand, Result<ReserveStockResponse>>
 {
@@ -19,6 +23,8 @@ public sealed class ReserveStockCommandHandler(
 
         if (product is null)
         {
+            await SendFailedReserveStock(request, cancellationToken);
+
             logger.LogWarning("Cannot reserve stock for product {ProductId} because it was not found",
                 request.ProductId);
             return Result.Fail<ReserveStockResponse>("Product not found");
@@ -28,11 +34,16 @@ public sealed class ReserveStockCommandHandler(
 
         if (reserveResult.IsFailed)
         {
+            await SendFailedReserveStock(request, cancellationToken);
+
             logger.LogWarning("Failed to reserve stock for product {ProductId}", request.ProductId);
             return Result.Fail<ReserveStockResponse>(reserveResult.Errors);
         }
 
         await repository.UpdateAsync(product, cancellationToken);
+
+        await publisher.PublishAsync(Topics.StockReserved,
+            new InventoryReservedEvent(request.OrderId, request.ProductId, request.Quantity), cancellationToken);
 
         logger.LogInformation("Reserved {Quantity} units of product {ProductId}", request.Quantity, product.Id);
 
@@ -41,4 +52,8 @@ public sealed class ReserveStockCommandHandler(
             QuantityAvailable: product.QuantityAvailable,
             QuantityReserved: request.Quantity));
     }
+
+    private async Task SendFailedReserveStock(ReserveStockCommand request, CancellationToken cancellationToken)
+        => await publisher.PublishAsync(Topics.StockReservationFailed,
+            new InventoryReserveFailEvent(request.OrderId, request.ProductId, request.Quantity), cancellationToken);
 }

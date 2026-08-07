@@ -1,5 +1,6 @@
 using Confluent.Kafka;
 using Contracts.Infra.Event;
+using Order.Api.Consumers;
 using Order.Api.Endpoints;
 using Order.Api.Messaging;
 using Order.Application;
@@ -13,6 +14,19 @@ builder.AddNpgsqlDbContext<OrderDbContext>("orderdb");
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 
+builder.Services.AddSingleton<IConsumer<string, string>>(sp =>
+{
+    var config = new ConsumerConfig
+    {
+        BootstrapServers = builder.Configuration.GetConnectionString("kafka"),
+        GroupId = "inventory-service",
+        AutoOffsetReset = AutoOffsetReset.Earliest,
+        AllowAutoCreateTopics = true
+    };
+
+    return new ConsumerBuilder<string, string>(config).Build();
+});
+
 builder.Services.AddSingleton<IProducer<string, string>>(sp =>
 {
     var config = new ProducerConfig
@@ -21,9 +35,12 @@ builder.Services.AddSingleton<IProducer<string, string>>(sp =>
     };
     return new ProducerBuilder<string, string>(config).Build();
 });
+
 builder.Services.AddScoped<IEventPublisher, KafkaEventPublisher>();
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddHostedService<InventoryReserveFailedConsumer>();
 
 var app = builder.Build();
 

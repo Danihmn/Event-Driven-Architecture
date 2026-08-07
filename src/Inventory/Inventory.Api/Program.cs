@@ -1,5 +1,7 @@
 using Confluent.Kafka;
+using Contracts.Infra.Event;
 using Inventory.Api.Consumers;
+using Inventory.Api.Messaging;
 using Inventory.Application;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Data.Context;
@@ -23,6 +25,17 @@ builder.Services.AddSingleton<IConsumer<string, string>>(sp =>
 
     return new ConsumerBuilder<string, string>(config).Build();
 });
+
+builder.Services.AddSingleton<IProducer<string, string>>(sp =>
+{
+    var config = new ProducerConfig
+    {
+        BootstrapServers = builder.Configuration.GetConnectionString("kafka")
+    };
+    return new ProducerBuilder<string, string>(config).Build();
+});
+
+builder.Services.AddScoped<IEventPublisher, KafkaEventPublisher>();
 
 builder.Services.AddOpenApi();
 

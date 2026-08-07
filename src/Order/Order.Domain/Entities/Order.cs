@@ -22,10 +22,9 @@ public class Order
         if (productId == Guid.Empty)
             return Result.Fail<Order>("ProductId is required.");
 
-        if (quantity <= 0)
-            return Result.Fail<Order>("Quantity must be greater than zero.");
-
-        return Result.Ok(new Order(productId, quantity));
+        return quantity <= 0
+            ? Result.Fail<Order>("Quantity must be greater than zero.")
+            : Result.Ok(new Order(productId, quantity));
     }
 
     public void Confirm()

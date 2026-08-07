@@ -2,31 +2,30 @@
 using Confluent.Kafka;
 using Contracts;
 using Contracts.Event;
-using Inventory.Application.Commands.ReserveStock;
 using MediatR;
+using Order.Application.Commands.CancelOrder;
 
-namespace Inventory.Api.Consumers;
+namespace Order.Api.Consumers;
 
-public class OrderCreatedConsumer(IConsumer<string, string> consumer, IServiceProvider serviceProvider)
+public class InventoryReserveFailedConsumer(IConsumer<string, string> consumer, IServiceProvider serviceProvider)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        consumer.Subscribe(Topics.OrderCreated);
+        consumer.Subscribe(Topics.StockReservationFailed);
 
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
                 var result = consumer.Consume(stoppingToken);
-                var @event = JsonSerializer.Deserialize<OrderCreatedEvent>(result.Message.Value)
-                             ?? throw new Exception("OrderCreatedEvent is null");
+                var @event = JsonSerializer.Deserialize<InventoryReserveFailEvent>(result.Message.Value)
+                             ?? throw new Exception("InventoryReserveFailEvent is null");
 
                 using var scope = serviceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-                await mediator.Send(new ReserveStockCommand(@event.ProductId, @event.OrderId, @event.Quantity),
-                    stoppingToken);
+                await mediator.Send(new CancelOrderCommand(@event.OrderId), stoppingToken);
 
                 consumer.Commit(result);
             }
