@@ -1,17 +1,19 @@
 ﻿using System.Text.Json;
 using Confluent.Kafka;
 using Contracts;
+using Contracts.Consumer;
 using MediatR;
 using Order.Application.Commands.ConfirmOrder;
 using Shared.Implementations.Event;
 
 namespace Order.Api.Consumers;
 
-public class InventoryReservedConsumer(IConsumer<string, string> consumer, IServiceProvider serviceProvider)
+public class InventoryReservedConsumer(IKafkaConsumerFactory kafkaConsumerFactory, IServiceProvider serviceProvider)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        using var consumer = kafkaConsumerFactory.Create("inventory-reserved");
         consumer.Subscribe(Topics.StockReserved);
 
         while (!stoppingToken.IsCancellationRequested)

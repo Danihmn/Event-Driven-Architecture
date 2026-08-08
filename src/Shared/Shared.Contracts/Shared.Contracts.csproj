@@ -7,4 +7,23 @@
         <RootNamespace>Contracts</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Remove="Infra\Consumer\IKafkaConsumerFactory.cs\**" />
+      <Compile Remove="Infra\Consumer\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Infra\Consumer\IKafkaConsumerFactory.cs\**" />
+      <EmbeddedResource Remove="Infra\Consumer\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Infra\Consumer\IKafkaConsumerFactory.cs\**" />
+      <None Remove="Infra\Consumer\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Confluent.Kafka" Version="2.15.0" />
+    </ItemGroup>
+
 </Project>

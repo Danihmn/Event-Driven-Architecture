@@ -1,10 +1,12 @@
 using Confluent.Kafka;
+using Contracts.Consumer;
 using Contracts.Infra.Publish;
 using Order.Api.Consumers;
 using Order.Api.Endpoints;
 using Order.Application;
 using Order.Infrastructure;
 using Order.Infrastructure.Data.Context;
+using Shared.Implementations.Consumer;
 using Shared.Implementations.Publish;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,18 +16,7 @@ builder.AddNpgsqlDbContext<OrderDbContext>("orderdb");
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 
-builder.Services.AddSingleton<IConsumer<string, string>>(_ =>
-{
-    var config = new ConsumerConfig
-    {
-        BootstrapServers = builder.Configuration.GetConnectionString("kafka"),
-        GroupId = "inventory-service",
-        AutoOffsetReset = AutoOffsetReset.Earliest,
-        AllowAutoCreateTopics = true
-    };
-
-    return new ConsumerBuilder<string, string>(config).Build();
-});
+builder.Services.AddSingleton<IKafkaConsumerFactory, KafkaConsumerFactory>();
 
 builder.Services.AddSingleton<IProducer<string, string>>(_ =>
 {
