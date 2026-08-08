@@ -1,13 +1,13 @@
 using Confluent.Kafka;
-using Contracts.Consumer;
-using Contracts.Infra.Publish;
+using Contracts.EventConsumer;
+using Contracts.Infra.EventPublisher;
 using Inventory.Api.Consumers;
 using Inventory.Application;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Data.Context;
 using Serilog;
-using Shared.Implementations.Consumer;
-using Shared.Implementations.Publish;
+using Shared.Implementations.EventConsumer;
+using Shared.Implementations.EventPublisher;
 
 var builder = WebApplication.CreateBuilder(args);
 

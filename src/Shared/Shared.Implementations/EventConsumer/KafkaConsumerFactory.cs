@@ -1,8 +1,8 @@
 ﻿using Confluent.Kafka;
-using Contracts.Consumer;
+using Contracts.EventConsumer;
 using Microsoft.Extensions.Configuration;
 
-namespace Shared.Implementations.Consumer;
+namespace Shared.Implementations.EventConsumer;
 
 public class KafkaConsumerFactory(IConfiguration configuration) : IKafkaConsumerFactory
 {

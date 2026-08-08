@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Confluent.Kafka;
 using Contracts;
-using Contracts.Consumer;
+using Contracts.EventConsumer;
 using Inventory.Application.Commands.ReserveStock;
 using MediatR;
 using Shared.Implementations.Event;

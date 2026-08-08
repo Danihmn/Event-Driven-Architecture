@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
 
-namespace Contracts.Consumer;
+namespace Contracts.EventConsumer;
 
 public interface IKafkaConsumerFactory
 {

@@ -1,5 +1,5 @@
 using Contracts;
-using Contracts.Infra.Publish;
+using Contracts.Infra.EventPublisher;
 using FluentResults;
 using Inventory.Domain.Repository;
 using MediatR;

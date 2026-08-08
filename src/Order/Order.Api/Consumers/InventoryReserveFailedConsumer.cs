@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Confluent.Kafka;
 using Contracts;
-using Contracts.Consumer;
+using Contracts.EventConsumer;
 using MediatR;
 using Order.Application.Commands.CancelOrder;
 using Shared.Implementations.Event;
