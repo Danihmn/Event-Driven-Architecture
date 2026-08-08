@@ -8,7 +8,10 @@ using Shared.Implementations.Event;
 
 namespace Inventory.Api.Consumers;
 
-public class OrderCreatedConsumer(IKafkaConsumerFactory kafkaConsumerFactory, IServiceProvider serviceProvider)
+public class OrderCreatedConsumer(
+    IKafkaConsumerFactory kafkaConsumerFactory,
+    IServiceProvider serviceProvider,
+    ILogger<OrderCreatedConsumer> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,6 +27,8 @@ public class OrderCreatedConsumer(IKafkaConsumerFactory kafkaConsumerFactory, IS
                 var @event = JsonSerializer.Deserialize<OrderCreatedEvent>(result.Message.Value)
                              ?? throw new Exception("OrderCreatedEvent is null");
 
+                logger.LogInformation("Received OrderCreatedEvent for OrderId {OrderId}", @event.OrderId);
+
                 using var scope = serviceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
@@ -32,8 +37,9 @@ public class OrderCreatedConsumer(IKafkaConsumerFactory kafkaConsumerFactory, IS
 
                 consumer.Commit(result);
             }
-            catch (ConsumeException)
+            catch (ConsumeException ex)
             {
+                logger.LogWarning(ex, "Error consuming from topic {Topic}, retrying", Topics.OrderCreated);
                 await Task.Delay(2000, stoppingToken);
             }
             catch (OperationCanceledException)

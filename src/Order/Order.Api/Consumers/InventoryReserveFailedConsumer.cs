@@ -10,7 +10,8 @@ namespace Order.Api.Consumers;
 
 public class InventoryReserveFailedConsumer(
     IKafkaConsumerFactory kafkaConsumerFactory,
-    IServiceProvider serviceProvider)
+    IServiceProvider serviceProvider,
+    ILogger<InventoryReserveFailedConsumer> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -26,6 +27,8 @@ public class InventoryReserveFailedConsumer(
                 var @event = JsonSerializer.Deserialize<InventoryReserveFailEvent>(result.Message.Value)
                              ?? throw new Exception("InventoryReserveFailEvent is null");
 
+                logger.LogInformation("Received InventoryReserveFailEvent for OrderId {OrderId}", @event.OrderId);
+
                 using var scope = serviceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
@@ -33,8 +36,9 @@ public class InventoryReserveFailedConsumer(
 
                 consumer.Commit(result);
             }
-            catch (ConsumeException)
+            catch (ConsumeException ex)
             {
+                logger.LogWarning(ex, "Error consuming from topic {Topic}, retrying", Topics.StockReservationFailed);
                 await Task.Delay(2000, stoppingToken);
             }
             catch (OperationCanceledException)

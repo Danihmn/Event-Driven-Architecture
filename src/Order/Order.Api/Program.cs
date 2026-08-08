@@ -6,10 +6,16 @@ using Order.Api.Endpoints;
 using Order.Application;
 using Order.Infrastructure;
 using Order.Infrastructure.Data.Context;
+using Serilog;
 using Shared.Implementations.Consumer;
 using Shared.Implementations.Publish;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services));
 
 builder.AddNpgsqlDbContext<OrderDbContext>("orderdb");
 

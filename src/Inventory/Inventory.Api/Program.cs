@@ -5,10 +5,16 @@ using Inventory.Api.Consumers;
 using Inventory.Application;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Data.Context;
+using Serilog;
 using Shared.Implementations.Consumer;
 using Shared.Implementations.Publish;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services));
 
 builder.AddNpgsqlDbContext<InventoryDbContext>("inventorydb");
 
