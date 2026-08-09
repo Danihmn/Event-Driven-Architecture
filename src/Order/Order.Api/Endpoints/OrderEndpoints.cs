@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Order.Application.Commands.CreateOrder;
+using Order.Application.Commands.GetAllOrders;
 
 namespace Order.Api.Endpoints;
 
@@ -9,17 +10,17 @@ public static class OrderEndpoints
     {
         var group = app.MapGroup("orders/");
 
-        group.MapPost("order", async (CreateOrderCommand command, ISender sender, CancellationToken ct) =>
+        group.MapGet("/", async
+            ([AsParameters] GetAllOrdersCommand request, ISender sender, CancellationToken ct) =>
         {
-            var result = await sender.Send(command, ct);
+            var result = await sender.Send(request, ct);
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Errors);
+        }).WithName("GetAllOrders").WithDescription("Returns all orders");
 
-            if (result.IsSuccess)
-                return Results.Created();
-
-            return Results.BadRequest(new
-            {
-                result.Errors
-            });
-        });
+        group.MapPost("order", async (CreateOrderCommand request, ISender sender, CancellationToken ct) =>
+        {
+            var result = await sender.Send(request, ct);
+            return result.IsSuccess ? Results.Created() : Results.BadRequest(result.Errors);
+        }).WithName("CreateOrder").WithDescription("Creates a new order");
     }
 }

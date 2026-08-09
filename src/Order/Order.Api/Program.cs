@@ -6,6 +6,7 @@ using Order.Api.Endpoints;
 using Order.Application;
 using Order.Infrastructure;
 using Order.Infrastructure.Data.Context;
+using Scalar.AspNetCore;
 using Serilog;
 using Shared.Implementations.EventConsumer;
 using Shared.Implementations.EventPublisher;
@@ -45,6 +46,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
