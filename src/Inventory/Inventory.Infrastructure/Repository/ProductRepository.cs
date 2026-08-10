@@ -8,7 +8,7 @@ namespace Inventory.Infrastructure.Repository;
 
 public class ProductRepository(InventoryDbContext context) : IProductRepository
 {
-    public async Task<IEnumerable<Product>> GetAllAsync(int skip, int take,
+    public async Task<IEnumerable<Product>?> GetAllAsync(int skip, int take,
         CancellationToken cancellationToken = default)
         => await context.Products.AsNoTracking().Skip(skip).Take(take).ToListAsync(cancellationToken);
 

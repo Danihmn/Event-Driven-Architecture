@@ -2,9 +2,11 @@ using Confluent.Kafka;
 using Contracts.EventConsumer;
 using Contracts.Infra.EventPublisher;
 using Inventory.Api.Consumers;
+using Inventory.Api.Endpoints;
 using Inventory.Application;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Data.Context;
+using Scalar.AspNetCore;
 using Serilog;
 using Shared.Implementations.EventConsumer;
 using Shared.Implementations.EventPublisher;
@@ -43,8 +45,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
+
+app.MapProductsEndpoints();
 
 app.Run();
