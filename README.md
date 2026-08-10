@@ -46,13 +46,15 @@ Extraído diretamente dos arquivos `.csproj` do repositório:
 - **FluentResults** (`4.0.0`) — retorno de resultados (`Result`/`Result<T>`) nas camadas de Domain.
 - **Entity Framework Core** (`10.0.10`) + **Npgsql.EntityFrameworkCore.PostgreSQL** (`10.0.3`) — persistência em Postgres nas camadas de Infrastructure.
 - **Microsoft.AspNetCore.OpenApi** (`10.0.10`) — exposição de OpenAPI nas APIs (habilitado em ambiente de Development).
+- **Scalar.AspNetCore** (`2.16.18`) — UI interativa de documentação da API (`/scalar/v1`), habilitada em ambiente de Development nas duas APIs.
+- **Serilog** — `Serilog.AspNetCore` (`10.0.0`), `Serilog.Settings.Configuration` (`10.0.1`) e `Serilog.Sinks.Console` (`6.1.1`) — logging estruturado nas duas APIs.
 - **Microsoft.Extensions.Configuration.UserSecrets** — usado nas camadas de Infrastructure.
 
 ## Como o fluxo de eventos funciona hoje
 
 Fluxo ponta a ponta, com base no que está implementado nos consumers e handlers:
 
-1. **Criação do pedido** — `POST orders/order` (`OrderEndpoints.cs`) envia `CreateOrderCommand` via MediatR. O `CreateOrderCommandHandler` cria a entidade `Order` (status `Pending`), persiste no `orderdb` e publica `OrderCreatedEvent` no tópico `order.created`.
+1. **Criação do pedido** — `POST orders/create` (`OrderEndpoints.cs`) envia `CreateOrderCommand` via MediatR. O `CreateOrderCommandHandler` cria a entidade `Order` (status `Pending`), persiste no `orderdb` e publica `OrderCreatedEvent` no tópico `order.created`.
 
 2. **Reserva de estoque** — `Inventory.Api` tem um `OrderCreatedConsumer` (`BackgroundService`) inscrito no tópico `order.created`. Ao consumir a mensagem, dispara `ReserveStockCommand`. O `ReserveStockCommandHandler` busca o `Product` no `inventorydb` e tenta reservar a quantidade:
    - Se a reserva **falhar** (produto não encontrado ou estoque insuficiente), publica `InventoryReserveFailEvent` no tópico `stock.reservation-failed`.
@@ -71,6 +73,27 @@ Os tópicos usados (`Shared.Contracts.Topics`) são:
 | `stock.reservation-failed` | `ReserveStockCommandHandler` (Inventory) | `InventoryReserveFailedConsumer` (Order) |
 
 A publicação é feita por `KafkaEventPublisher`, que implementa `IEventPublisher` (definido em `Shared.Contracts`) usando `IProducer<string, string>` do Confluent.Kafka, serializando o evento em JSON. Os consumers são `BackgroundService`s que assinam o tópico, desserializam a mensagem e enviam o comando correspondente via `IMediator`.
+
+## Endpoints disponíveis
+
+**Order.Api** (`OrderEndpoints.cs`, grupo `orders/`):
+
+| Método | Rota | Query params | Descrição |
+|---|---|---|---|
+| POST | `orders/create` | — | Cria um novo pedido |
+| GET | `orders/` | `skip`, `take` (int) | Lista pedidos (Id, ProductId, Quantity, Status, CreatedAt) |
+
+**Inventory.Api** (`ProductsEndpoints.cs`, grupo `products/`):
+
+| Método | Rota | Query params | Descrição |
+|---|---|---|---|
+| GET | `products/` | `skip`, `take` (int) | Lista produtos (Id, Name, Price, QuantityAvailable, CreatedAt) |
+
+Ambas as APIs expõem documentação interativa via **Scalar** em `/scalar/v1` quando rodando em ambiente de Development.
+
+## Logging
+
+`Order.Api` e `Inventory.Api` usam **Serilog** para logging estruturado, configurado via `builder.Host.UseSerilog(...)` lendo a seção `Serilog` de cada `appsettings.json` (nível padrão `Information`, override de `Microsoft`/`System` para `Warning`, saída no console). Handlers (MediatR) e consumers de Kafka injetam `ILogger<T>` para registrar o fluxo de eventos.
 
 ## Como rodar o projeto localmente
 
