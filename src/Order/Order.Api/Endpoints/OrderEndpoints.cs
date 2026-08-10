@@ -11,9 +11,9 @@ public static class OrderEndpoints
         var group = app.MapGroup("orders/");
 
         group.MapGet("", async
-            ([AsParameters] GetAllOrdersCommand request, ISender sender, CancellationToken ct) =>
+            (ISender sender, CancellationToken ct, int skip, int take) =>
         {
-            var result = await sender.Send(request, ct);
+            var result = await sender.Send(new GetAllOrdersCommand(skip, take), ct);
             return result.IsSuccess
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(new

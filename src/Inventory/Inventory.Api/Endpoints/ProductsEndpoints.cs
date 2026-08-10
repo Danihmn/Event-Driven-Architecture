@@ -1,6 +1,5 @@
 ﻿using Inventory.Application.Commands.GetAllProducts;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Api.Endpoints;
 
@@ -10,10 +9,9 @@ public static class ProductsEndpoints
     {
         var group = app.MapGroup("products/");
 
-        group.MapGet("", async
-            ([AsParameters] GetAllProductsCommand request, ISender sender, CancellationToken ct) =>
+        group.MapGet("", async (ISender sender, CancellationToken ct, int skip, int take) =>
         {
-            var result = await sender.Send(request, ct);
+            var result = await sender.Send(new GetAllProductsCommand(skip, take), ct);
             return result.IsSuccess
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(new

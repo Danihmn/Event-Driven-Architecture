@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Order.Application.Commands.GetAllOrders;
 
-public sealed record GetAllOrdersCommand(int Skip = 0, int Take = 50)
+public sealed record GetAllOrdersCommand(int Skip, int Take)
     : IRequest<Result<IEnumerable<GetAllOrdersResponse>>>;
